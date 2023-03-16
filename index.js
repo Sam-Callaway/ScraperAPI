@@ -41,7 +41,7 @@ app.listen(3001, () => {
 
 function scraper(articleURL){
     // Fetch the article content
-    fetch(articleUrl)
+    fetch(articleURL)
     .then(response => response.text()) // Convert response to text
     .then(html => {
         // Parse the HTML response using DOMParser
