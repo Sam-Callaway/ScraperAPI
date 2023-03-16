@@ -18,7 +18,7 @@ app.use(helmet());
 app.use(bodyParser.json());
 
 // enabling CORS for all requests
-//app.use(cors());
+app.use(cors());
 
 // adding morgan to log HTTP requests
 app.use(morgan('combined'));
@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
                 // Do something with the article text
         res.send($('p').text());
     })
-    .catch(error => console.error(error));
+    .catch(error => console.log(error));
     
   } else {res.status(403)}
 });
