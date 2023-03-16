@@ -29,8 +29,16 @@ app.get('/', (req, res) => {
   const providedKey = req.query.apiKey
   if (providedKey === apiKey){  
     console.log(searchURL)
+    fetch(searchURL)
+    .then(response => response.text()) // Convert response to text
+    .then(html => {
+        // Parse the HTML response using cheerio
+        const $ = cheerio.load(html)
+                // Do something with the article text
+        res.send($('p').text());
+    })
+    .catch(error => console.error(error));
     
-    res.send(scraper(searchURL));
   } else {res.status(403)}
 });
 
@@ -40,17 +48,3 @@ app.listen(3001, () => {
 });
 
 
-
-function scraper(articleURL){
-    console.log("scraperstarted")
-    // Fetch the article content
-    return fetch(articleURL)
-    .then(response => response.text()) // Convert response to text
-    .then(html => {
-        // Parse the HTML response using cheerio
-        const $ = cheerio.load(html)
-                // Do something with the article text
-        return($('p').text());
-    })
-    .catch(error => console.error(error)); // Handle any errors
-}
