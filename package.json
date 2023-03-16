@@ -1,0 +1,30 @@
+{
+  "name": "scraperapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sam-Callaway/ScraperAPI.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sam-Callaway/ScraperAPI/issues"
+  },
+  "homepage": "https://github.com/Sam-Callaway/ScraperAPI#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "helmet": "^6.0.1",
+    "morgan": "^1.10.0",
+    "node-fetch": "^3.3.1"
+  }
+}
