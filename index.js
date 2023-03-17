@@ -1,50 +1,48 @@
-import dotenv from 'dotenv';
-dotenv.config();
+// const express = require('express');
+// const request = require('request');
+
+// const app = express();
+
+// app.use((req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   next();
+// });
+
+// app.get('/jokes/random', (req, res) => {
+//   request(
+//     { url: 'https://joke-api-strict-cors.appspot.com/jokes/random' },
+//     (error, response, body) => {
+//       if (error || response.statusCode !== 200) {
+//         return res.status(500).json({ type: 'error', message: err.message });
+//       }
+
+//       res.json(JSON.parse(body));
+//     }
+//   )
+// });
+
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => console.log(`listening on ${PORT}`));
+
+
+// ES6 or TypeScript:
 import * as cheerio from 'cheerio';
 import fetch from 'node-fetch';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import helmet from 'helmet';
-import morgan from 'morgan';
-import express from 'express'
-const app = express()
 
-const apiKey = process.env.apiKey
+console.log("starting")
 
-// adding Helmet to enhance your Rest API's security
-app.use(helmet());
+// URL of the article to fetch
+const articleUrl = 'https://www.bbc.co.uk/news/business-64963523';
 
-// using bodyParser to parse JSON bodies into JS objects
-app.use(bodyParser.json());
+// Fetch the article content
+fetch(`https://www.bbc.co.uk/news/business-64963523`)
+.then(response => response.text()) // Convert response to text
+.then(html => {
+  // Parse the HTML response using DOMParser
+  const $ = cheerio.load(html)
+  
 
-// enabling CORS for all requests
-app.use(cors());
-
-// adding morgan to log HTTP requests
-app.use(morgan('combined'));
-
-// defining an endpoint
-app.get('/', (req, res) => {
-  const searchURL = req.query.search
-  const providedKey = req.query.apiKey
-  if (providedKey === apiKey){  
-    console.log(searchURL)
-    fetch(searchURL)
-    .then(response => response.text()) // Convert response to text
-    .then(html => {
-        // Parse the HTML response using cheerio
-        const $ = cheerio.load(html)
-                // Do something with the article text
-        res.send($('p').text());
-    })
-    .catch(error => console.log(error));
-    
-  } else {res.status(403)}
-});
-
-// starting the server
-app.listen(3001, () => {
-  console.log('listening on port 3001');
-});
-
-
+  // Do something with the article text
+  console.log($('p').text());
+})
+.catch(error => console.error(error)); // Handle any errors
