@@ -1,48 +1,30 @@
-// const express = require('express');
-// const request = require('request');
+const cheerio = require ('cheerio');
+const express = require('express');
+const request = require('request');
+require('dotenv').config();
 
-// const app = express();
+var cors = require('cors')
 
-// app.use((req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', '*');
-//   next();
-// });
+const apiKey = process.env.apiKey
+const app = express();
+app.use(cors())
 
-// app.get('/jokes/random', (req, res) => {
-//   request(
-//     { url: 'https://joke-api-strict-cors.appspot.com/jokes/random' },
-//     (error, response, body) => {
-//       if (error || response.statusCode !== 200) {
-//         return res.status(500).json({ type: 'error', message: err.message });
-//       }
+app.get('/', (req, res) => {
+  const requestedUrl = req.query.url;
+  const key = req.query.key
+  if (key == apiKey){
+  request(requestedUrl, (error, response, html) => {
+    if (!error && response.statusCode === 200) {
+      const $ = cheerio.load(html)
+      let arr = $('p').toArray().map((x) => { return $(x).text()});
+      res.send(arr)
+    } else {
+      res.status(response.statusCode).send(error);
+    }
+  });
+  } else {res.send("Incorrect key")}
+});
 
-//       res.json(JSON.parse(body));
-//     }
-//   )
-// });
+const port = process.env.PORT || 2000
 
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => console.log(`listening on ${PORT}`));
-
-
-// ES6 or TypeScript:
-import * as cheerio from 'cheerio';
-import fetch from 'node-fetch';
-
-console.log("starting")
-
-// URL of the article to fetch
-const articleUrl = 'https://www.bbc.co.uk/news/business-64963523';
-
-// Fetch the article content
-fetch(`https://www.bbc.co.uk/news/business-64963523`)
-.then(response => response.text()) // Convert response to text
-.then(html => {
-  // Parse the HTML response using DOMParser
-  const $ = cheerio.load(html)
-  
-
-  // Do something with the article text
-  console.log($('p').text());
-})
-.catch(error => console.error(error)); // Handle any errors
+app.listen(port, () => console.log(`Server started on port ${port}`));
